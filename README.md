@@ -40,3 +40,6 @@ this is SSH url
 git clone git@github.com:kksharma2101/sembark-assignment.git
 cd folder_name
 ```
+### 2. npm install
+
+### 3. npm start

@@ -38,3 +38,9 @@ export const headerNavItems = [
     { label: "Products", href: "/", value: "products" },
     { label: "About", href: "/", value: "about" },
 ]
+
+export interface GoBackButtonProps {
+    href?: string;
+    className?: string;
+    containerClassName?: string;
+}

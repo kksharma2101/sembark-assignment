@@ -6,6 +6,7 @@ import { useCart } from '../context/CartContext';
 import { getProductById } from '../api/productApi';
 import NotFound from '../components/NotFound';
 import LoadingState from '../components/LoadingState';
+import GoBack from '../components/Goback';
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -46,7 +47,9 @@ const ProductDetail = () => {
     }
 
     return (
-        <div className='max-w-6xl mx-auto p-6'>
+        <div className='max-w-6xl mx-auto  px-4 md:px-6'>
+            <GoBack href='/' />
+
             <div className='grid md:grid-cols-2 gap-8 bg-white rounded-2xl shadow-md p-6'>
                 <img
                     src={product.images?.[0]}

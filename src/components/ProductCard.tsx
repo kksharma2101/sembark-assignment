@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { ProductCardProps } from '../types/Product';
+import { useCart } from '../context/CartContext';
 
 const ProductCard = ({ product }: ProductCardProps) => {
+    const { addToCart } = useCart();
 
     return (
         <div className='bg-white rounded-2xl shadow-md overflow-hidden '>
@@ -29,10 +31,17 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 <div className='flex items-center justify-between py-3'>
                     <Link
                         to={`/product/${product.id}`}
-                        className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg w-full text-center'
+                        className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg'
                     >
                         View
                     </Link>
+
+                    <button
+                        onClick={() => addToCart(product)}
+                        className='bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg'
+                    >
+                        Add to Cart
+                    </button>
                 </div>
             </div>
         </div>

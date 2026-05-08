@@ -4,30 +4,22 @@ import { useSearchParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
 
-import { Product } from '../types/Product';
+import { Product, SortOption, SORT_OPTIONS } from '../types/Product';
 import LoadingState from '../components/LoadingState';
 import { getProducts } from '../api/productApi';
+import { ChevronDown } from 'lucide-react';
 
-// Supported sort options
-type SortOption = 'default' | 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc';
-
-const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-    { value: 'default', label: 'Default' },
-    { value: 'price-asc', label: 'Price: Low to High' },
-    { value: 'price-desc', label: 'Price: High to Low' },
-    { value: 'name-asc', label: 'Name: A–Z' },
-    { value: 'name-desc', label: 'Name: Z–A' },
-];
 
 const Home = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
-
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [open, setOpen] = useState(false);
+    const [selectRange, setSelectRange] = useState("Defualt");
 
     const selectedCategories: string[] = useMemo(() => {
         const raw = searchParams.get('categories');
-        return raw ? raw.split(',').filter(Boolean) : [];
+        return raw ? raw.split(',') : [];
     }, [searchParams]);
 
     const selectedSort: SortOption = useMemo(() => {
@@ -35,6 +27,7 @@ const Home = () => {
         return SORT_OPTIONS.some((o) => o.value === raw) ? (raw as SortOption) : 'default';
     }, [searchParams]);
 
+    // this function manage the multiple category
     const handleSelectCategories = (categories: string[]) => {
         setSearchParams((prev) => {
             const next = new URLSearchParams(prev);
@@ -47,6 +40,7 @@ const Home = () => {
         });
     };
 
+    // this function hlp to select range
     const handleSelectSort = (sort: SortOption) => {
         setSearchParams((prev) => {
             const next = new URLSearchParams(prev);
@@ -57,8 +51,19 @@ const Home = () => {
             }
             return next;
         });
+        let rangeVal = ""
+        if (sort === "default") {
+            rangeVal = "Default"
+        } else if (sort === "price-asc") {
+            rangeVal = "Low to High"
+        } else if (sort === "price-desc") {
+            rangeVal = "High to Low"
+        }
+        setSelectRange(rangeVal)
+        setOpen(false)
     };
 
+    // Here is fetch the product
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -108,41 +113,52 @@ const Home = () => {
         return sorted;
     }, [products, selectedCategories, selectedSort]);
 
+
     if (loading) {
         return <LoadingState />;
     }
 
     return (
-        <div className='max-w-7xl mx-auto px-4 py-6'>
-            {/* Filters + Sort row */}
-            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6'>
+        <div className='max-w-7xl mx-auto px-4 pb-6'>
+            <div className='flex gap-2'>
                 <CategoryFilter
                     categories={categories}
                     selected={selectedCategories}
                     onSelect={handleSelectCategories}
                 />
-
-                {/* Sort dropdown */}
-                <select
-                    value={selectedSort}
-                    onChange={(e) => handleSelectSort(e.target.value as SortOption)}
-                    className='self-start sm:self-auto px-4 py-2 rounded-lg bg-white border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-black'
-                >
-                    {SORT_OPTIONS.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                        </option>
-                    ))}
-                </select>
+                <div className="relative">
+                    <button
+                        onClick={() => setOpen((prev) => !prev)}
+                        className='flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 transition-colors text-sm font-medium min-w-[160px] justify-between'
+                    >
+                        <span>{selectRange}</span>
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+                    </button>
+                    {
+                        open &&
+                        <div className='absolute z-10 mt-2 w-56 rounded-lg bg-white border border-gray-200 shadow-lg overflow-hidden'>
+                            {SORT_OPTIONS.map((range) => {
+                                return (
+                                    <button
+                                        key={range.value}
+                                        onClick={() => handleSelectSort(range.value)}
+                                        className="w-full flex items-center gap-2 px-4 py-2 text-sm"
+                                    >
+                                        {range.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    }
+                </div>
             </div>
 
-            {/* Product grid */}
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
                 {filteredProducts.map((product) => (
                     <ProductCard key={product.id} product={product} />
                 ))}
             </div>
-        </div>
+        </div >
     );
 };
 

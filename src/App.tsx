@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import Breadcrumbs from './components/Breadcrumbs';
 import Home from './pages/Home';
 import ProductDetail from './pages/ProductDetail';
 import { CartProvider } from './context/CartContext';
@@ -13,7 +12,6 @@ function App() {
         <div className='min-h-screen bg-gray-100'>
           <Header />
 
-          <Breadcrumbs />
 
           <Routes>
             <Route path='/' element={<Home />} />

@@ -1,6 +1,7 @@
 import { ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { headerNavItems } from '../types/Product';
 
 const Header = () => {
     const { totalItems } = useCart();
@@ -13,10 +14,21 @@ const Header = () => {
                         {/* <img src='/sembark_logo.png' width={120} height={120} /> */}Sem-Ecommerce
                     </Link>
 
-                    <Link to='/cart' className='font-semibold relative'>
-                        <ShoppingCart color='black' />
-                        <span className="absolute -right-1 -top-4 text-orange-400 ">{totalItems > 0 && totalItems}</span>
-                    </Link>
+                    <div className="flex items-center gap-5">
+                        <ul className="flex items-center gap-3">
+                            {
+                                headerNavItems.map((item) => (
+                                    <Link to={item.href}>
+                                        <li className="font-bold cursor-pointer hover:text-blue-500" key={item.value}>{item.label}</li>
+                                    </Link>
+                                ))
+                            }
+                        </ul>
+                        <Link to='/cart' className='font-semibold relative'>
+                            <ShoppingCart color='black' />
+                            <span className="absolute -right-1 -top-4 text-orange-400 ">{totalItems > 0 && totalItems}</span>
+                        </Link>
+                    </div>
                 </div>
             </header>
 

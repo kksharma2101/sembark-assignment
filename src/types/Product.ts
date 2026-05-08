@@ -22,3 +22,19 @@ export interface CategoryProps {
     selected: string[];
     onSelect: (category: string[]) => void;
 }
+
+// there is product sorting types
+export type SortOption = 'default' | 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc';
+
+export const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+    { value: 'default', label: 'Default' },
+    { value: 'price-asc', label: 'Low to High' },
+    { value: 'price-desc', label: 'High to Low' },
+];
+
+export const headerNavItems = [
+    { label: "Home", href: "/", value: "home" },
+    { label: "Services", href: "/", value: "services" },
+    { label: "Products", href: "/", value: "products" },
+    { label: "About", href: "/", value: "about" },
+]

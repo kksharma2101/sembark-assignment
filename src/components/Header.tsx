@@ -15,7 +15,7 @@ const Header = () => {
                     </Link>
 
                     <div className="flex items-center gap-5">
-                        <ul className="flex items-center gap-3">
+                        <ul className="hidden md:flex items-center gap-3">
                             {
                                 headerNavItems.map((item) => (
                                     <Link to={item.href}>
@@ -32,7 +32,7 @@ const Header = () => {
                 </div>
             </header>
 
-            <div className="pt-20" />
+            <div className="pt-24" />
         </main>
     );
 };
